@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/connect_master"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/connect_sitStand"
+            android:text="Balance M" />
+
+        <Button
+            android:id="@+id/connect_slave"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/connect_master"
+            android:text="Balance S" />
+
+        <Button
+            android:id="@+id/connect_sitStand"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/connect_gait"
+            android:text="Sit" />
+
+        <Button
+            android:id="@+id/connect_gait"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Gait" />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout_SitStand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/linearLayout_Balance"
+            android:layout_marginTop="19dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/Sit_Stand_Test:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sit and Stand Test"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/SitStandUser"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name: " />
+
+            <TextView
+                android:id="@+id/SitAndStandStatus"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SitStand Test Status: " />
+
+            <TextView
+                android:id="@+id/SitStandConnection"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SitStand Test Terminal: " />
+
+            <TextView
+                android:id="@+id/SitStandResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SitStand Result: " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_Balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="18dp"
+            android:layout_weight="0.00"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/Balance_Test:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Balance Test"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/Balance_User"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name: " />
+
+            <TextView
+                android:id="@+id/BalanceTestStatus"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Test Status: OFF" />
+
+            <TextView
+                android:id="@+id/FirstTestResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="First Test: " />
+
+            <TextView
+                android:id="@+id/SecondTestResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Second Test: " />
+
+            <TextView
+                android:id="@+id/ThirdTestResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Third Test: " />
+
+            <TextView
+                android:id="@+id/ConnectionMasterPoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Master terminal: Offline" />
+
+            <TextView
+                android:id="@+id/ConnectionSlavePoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Slave terminal: Offline" />
+
+            <TextView
+                android:id="@+id/BalanceResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Result: " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_Gait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/Gait_Speed_Test:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Speed Test"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/Gait_User"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name: " />
+
+            <TextView
+                android:id="@+id/GaitStatus"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Test Status: " />
+
+            <TextView
+                android:id="@+id/GaitConnection"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Test Terminal: " />
+
+            <TextView
+                android:id="@+id/GaitResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Result: " />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
