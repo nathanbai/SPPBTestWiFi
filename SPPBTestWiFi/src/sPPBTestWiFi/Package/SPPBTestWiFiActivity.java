@@ -8,7 +8,9 @@
  * 
  */
 package sPPBTestWiFi.Package;
-
+/*
+ *  Use GIT to control version is great
+ * */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
