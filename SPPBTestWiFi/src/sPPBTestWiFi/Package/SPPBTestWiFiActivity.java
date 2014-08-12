@@ -115,6 +115,9 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     private String strTimeTraveled = null;
     
     public String User_Name = null;
+    public String User_Name_Gait = null;
+    public String User_Name_SitStand = null;
+    public String User_Name_Balance = null;
     
     public int Selected_Time = 6;
     
@@ -1045,6 +1048,8 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     			
     		});
         	textToSpeak = "Your Balance test score is " + balance_score;
+        	
+        	writeFileToSD(User_Name_Balance + ".txt", "\n Balance score: " + balance_score + "\n");
         } 
         
 		//////////////////////////////////////////////////////////////////////////////
@@ -1081,6 +1086,8 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     			
     		});
         	textToSpeak = "Your SitStand test score is " + sitStandScore;
+        	
+        	writeFileToSD(User_Name_SitStand + ".txt", "\n Repeat sit and stand score: " + sitStandScore + "\n");
         } 
         
 		//////////////////////////////////////////////////////////////////////////////
@@ -1117,6 +1124,8 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     			
     		});
         	textToSpeak = "Your Gait speed test score is " + gaitScore;
+        	
+        	writeFileToSD(User_Name_Gait + ".txt", "\n Gait speed score: " + gaitScore + "\n");
         } 
         
 		//////////////////////////////////////////////////////////////////////////////
@@ -1130,30 +1139,32 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         	User_Name = contact.getName();
         	if(User_Name != null) {
         		if(text.endsWith("GT")) {
-            		textToSpeak = User_Name + ", Please go ahead for the gait speed test";
+        			User_Name_Gait = User_Name;
+            		textToSpeak = User_Name_Gait + ", Please go ahead for the gait speed test";
             		runOnUiThread(new Runnable() {
         				public void run() {
         					// TODO Auto-generated method stub
-        					TextGaitUserName.setText("User Name: " + User_Name);
+        					TextGaitUserName.setText("User Name: " + User_Name_Gait);
         				}
             			
             		});
             	} else if(text.endsWith("ST")) {
-                		textToSpeak = User_Name + ", Please go ahead push the button and start the sit stand test";
-                		runOnUiThread(new Runnable() {
-            				public void run() {
-            					// TODO Auto-generated method stub
-            					TextSitStandUserName.setText("User Name: " + User_Name);
-            				}
-                			
-                		});
-            	} else if(text.endsWith("BT")) {
-            		
-            		textToSpeak = User_Name + ", Please go ahead push the button and start the Balance test";
+            		User_Name_SitStand = User_Name;
+            		textToSpeak = User_Name_SitStand + ", Please go ahead push the button and start the sit stand test";
             		runOnUiThread(new Runnable() {
         				public void run() {
         					// TODO Auto-generated method stub
-        					TextBalanceUserName.setText("User Name: " + User_Name);
+        					TextSitStandUserName.setText("User Name: " + User_Name_SitStand);
+        				}
+            			
+            		});
+            	} else if(text.endsWith("BT")) {
+            		User_Name_Balance = User_Name;
+            		textToSpeak = User_Name_Balance + ", Please go ahead push the button and start the Balance test";
+            		runOnUiThread(new Runnable() {
+        				public void run() {
+        					// TODO Auto-generated method stub
+        					TextBalanceUserName.setText("User Name: " + User_Name_Balance);
         				}
             			
             		});
@@ -1242,7 +1253,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 		}
 		try {
 			String pathName = Environment.getExternalStorageDirectory()
-					.getPath() + "/5 Minutes Walk/";
+					.getPath() + "/SPPB/";
 			String fileName = File_name;
 			File path = new File(pathName);
 			File file = new File(pathName + fileName);
