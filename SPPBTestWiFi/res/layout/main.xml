@@ -83,6 +83,12 @@
                 android:text="SitStand Test Terminal: " />
 
             <TextView
+                android:id="@+id/SitStandTime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SitStand Time: " />
+            
+            <TextView
                 android:id="@+id/SitStandResult"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -123,18 +129,33 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="First Test: " />
+            <TextView
+                android:id="@+id/FirstTestTime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="First Test Time: " />
 
             <TextView
                 android:id="@+id/SecondTestResult"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Second Test: " />
+            <TextView
+                android:id="@+id/SecondTestTime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Second Test Time: " />
 
             <TextView
                 android:id="@+id/ThirdTestResult"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Third Test: " />
+            <TextView
+                android:id="@+id/ThirdTestTime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Third Test Time: " />
 
             <TextView
                 android:id="@+id/ConnectionMasterPoint"
@@ -189,6 +210,17 @@
                 android:layout_height="wrap_content"
                 android:text="Gait Test Terminal: " />
 
+            <TextView
+                android:id="@+id/GaitTimeForward"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Time Forward: " />
+            <TextView
+                android:id="@+id/GaitTimeReturn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Gait Time Return: " />
+            
             <TextView
                 android:id="@+id/GaitResult"
                 android:layout_width="fill_parent"
