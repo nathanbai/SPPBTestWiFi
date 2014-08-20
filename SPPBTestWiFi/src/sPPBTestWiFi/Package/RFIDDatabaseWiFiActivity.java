@@ -280,7 +280,7 @@ public class RFIDDatabaseWiFiActivity extends Activity implements OnInitListener
         		
         		networktask_registeration = new NetworkTaskRegisteration(); //New instance of NetworkTask
         		
-        		networktask_registeration.sockaddr = new InetSocketAddress("192.168.0.106", 4567);
+        		networktask_registeration.sockaddr = new InetSocketAddress("192.168.0.107", 4567);
         		networktask_registeration.execute();
         		
         		
