@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -1240,6 +1241,18 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         	Contact contact = db.getContact(text.substring(0, 12));       
         	User_Name = contact.getName();
         	if(User_Name != null) {
+        		
+        		Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+
+    			t.setToNow(); // 取得系统时间。
+    			int year = t.year;
+    			int month = t.month + 1;
+    			int date = t.monthDay;
+    			
+    			String Data_time = "" + year + "-" + month + "-" + date;
+    			
+    			writeFileToSD(User_Name_Gait + ".txt", "\n" + Data_time + "\n");
+    			
         		if(text.endsWith("GT")) {
         			User_Name_Gait = User_Name;
             		textToSpeak = User_Name_Gait + ", Please go ahead for the gait speed test";
@@ -1353,6 +1366,21 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     /**
 	 * write data to SD card
 	 */
+    
+    /*
+     * 
+     * Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+
+			t.setToNow(); // 取得系统时间。
+			int year = t.year;
+			int month = t.month + 1;
+			int date = t.monthDay;
+			int hour = t.hour; // 0-23
+			int minute = t.minute;
+			int second = t.second;
+			EEG_Data_time = "" + year + "-" + month + "-" + date + "-" + hour
+					+ "-" + minute + "-" + second;
+     * */
 	public void writeFileToSD(String File_name, String gait_speed_data) {
 		String sdStatus = Environment.getExternalStorageState();
 		if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
@@ -1375,7 +1403,9 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 			}
 			FileOutputStream stream = new FileOutputStream(file, true);
 			// String s = "this is a test string writing to file.";
+			
 			byte[] buf = gait_speed_data.getBytes();
+			
 			stream.write(buf);
 			
 			stream.close();
