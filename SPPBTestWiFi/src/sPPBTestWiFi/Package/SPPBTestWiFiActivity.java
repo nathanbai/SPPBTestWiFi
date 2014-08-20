@@ -1037,10 +1037,10 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         	
         } 
         
-        if(text.equalsIgnoreCase("BalanceTimeFirst")) {
+        if(text.startsWith("BalanceTimeFirst")) {
         	//startFlag = false;	
         	
-        	balance_time_1 = Integer.valueOf(text.substring(8));
+        	balance_time_1 = Integer.valueOf(text.substring(16));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1048,15 +1048,15 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your Balance test time (First) is " + balance_time_1/1000.0f + " seconds";
+        	//textToSpeak = "Your Balance test time (First) is " + balance_time_1/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_Balance + ".txt", "\n Balance time First: " + balance_time_1/1000.0f + " seconds\n");
         }
         
-        if(text.equalsIgnoreCase("BalanceTimeSecond")) {
+        if(text.startsWith("BalanceTimeSecond")) {
         	//startFlag = false;	
         	
-        	balance_time_2 = Integer.valueOf(text.substring(8));
+        	balance_time_2 = Integer.valueOf(text.substring(17));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1064,15 +1064,15 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your Balance test time (Second) is " + balance_time_2/1000.0f + " seconds";
+        	//textToSpeak = "Your Balance test time (Second) is " + balance_time_2/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_Balance + ".txt", "\n Balance time Second: " + balance_time_2/1000.0f + " seconds\n");
         }
         
-        if(text.equalsIgnoreCase("BalanceTimeThird")) {
+        if(text.startsWith("BalanceTimeThird")) {
         	//startFlag = false;	
         	
-        	balance_time_3 = Integer.valueOf(text.substring(8));
+        	balance_time_3 = Integer.valueOf(text.substring(16));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1080,7 +1080,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your Balance test time (Third) is " + balance_time_3/1000.0f + " seconds";
+        	//textToSpeak = "Your Balance test time (Third) is " + balance_time_3/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_Balance + ".txt", "\n Balance time Third: " + balance_time_3/1000.0f + " seconds\n");
         }
@@ -1127,10 +1127,10 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         	}
         }
         
-        if(text.equalsIgnoreCase("SitTime")) {
+        if(text.startsWith("SitTime")) {
         	//startFlag = false;	
         	
-    		sitStandTime = Integer.valueOf(text.substring(8));
+    		sitStandTime = Integer.valueOf(text.substring(7));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1138,7 +1138,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your SitStand test time is " + sitStandTime/1000.0f + " seconds";
+        	//textToSpeak = "Your SitStand test time is " + sitStandTime/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_SitStand + ".txt", "\n Repeat sit and stand time: " + sitStandTime/1000.0f + " seconds\n");
         }
@@ -1181,10 +1181,10 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         	}
         }
         
-        if(text.equalsIgnoreCase("GiatTimeForward")) {
+        if(text.startsWith("GaitTimeForward")) {
         	//startFlag = false;	
         	
-        	gaitTimeForward = Integer.valueOf(text.substring(8));
+        	gaitTimeForward = Integer.valueOf(text.substring(15));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1192,15 +1192,15 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your forward gait test time is " + gaitTimeForward/1000.0f + " seconds";
+        	//textToSpeak = "Your forward gait test time is " + gaitTimeForward/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_Gait + ".txt", "\n Gait time forward: " + gaitTimeForward/1000.0f + " seconds\n");
         }
         
-        if(text.equalsIgnoreCase("GiatTimeReturn")) {
+        if(text.startsWith("GaitTimeReturn")) {
         	//startFlag = false;	
         	
-        	gaitTimeReturn = Integer.valueOf(text.substring(8));
+        	gaitTimeReturn = Integer.valueOf(text.substring(14));
     		runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO Auto-generated method stub
@@ -1208,7 +1208,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 				}
     			
     		});
-        	textToSpeak = "Your return gait test time is " + gaitTimeReturn/1000.0f + " seconds";
+        	//textToSpeak = "Your return gait test time is " + gaitTimeReturn/1000.0f + " seconds";
         	
         	writeFileToSD(User_Name_Gait + ".txt", "\n Gait time return: " + gaitTimeReturn/1000.0f + " seconds\n");
         }
@@ -1247,6 +1247,8 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         				public void run() {
         					// TODO Auto-generated method stub
         					TextGaitUserName.setText("User Name: " + User_Name_Gait);
+        					TextGaitTimeForward.setText("Gait Time Forward: ");
+        					TextGaitTimeReturn.setText("Gait Time Return: ");
         				}
             			
             		});
@@ -1257,6 +1259,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         				public void run() {
         					// TODO Auto-generated method stub
         					TextSitStandUserName.setText("User Name: " + User_Name_SitStand);
+        					TextSitStandTime.setText("SitStand Time: ");
         				}
             			
             		});
@@ -1267,6 +1270,9 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         				public void run() {
         					// TODO Auto-generated method stub
         					TextBalanceUserName.setText("User Name: " + User_Name_Balance);
+        					TextBalanceTimeFirst.setText("Balance Time First: ");
+        					TextBalanceTimeSecond.setText("Balance Time Second: ");
+        					TextBalanceTimeThird.setText("Balance Time Third: ");
         				}
             			
             		});
