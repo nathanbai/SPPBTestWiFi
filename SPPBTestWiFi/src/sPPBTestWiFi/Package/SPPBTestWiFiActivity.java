@@ -64,10 +64,12 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 	Button buttonConnect_slave;//(dis)connect Button
 	Button buttonConnect_sitStand;//(dis)connect Button
 	Button buttonConnect_gait;//(dis)connect Button
+	Button buttonConnect_remote;//(dis)connect Button
 	
 	
     public NetworkTaskMaster networktask_master;//networktask is the included class to handle the socketconnection
     public NetworkTaskSlave networktask_slave;//networktask is the included class to handle the socketconnection
+    public NetworkTaskRemote networktask_remote;//networktask is the included class to handle the socketconnection
     public NetworkTaskSitStand networktask_sitStand;//networktask is the included class to handle the socketconnection
     public NetworkTaskGait networktask_gait;//networktask is the included class to handle the socketconnection
     
@@ -75,19 +77,23 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     public String ipTail_slave = "103";
     public String ipTail_sitStand = "105";
     public String ipTail_gait = "106";
+    public String ipTail_remote = "108";
     
     public Timer checkConnection_timer = null;
     boolean Connect_flag_master = false;
     boolean Connect_flag_slave = false;
+    boolean Connect_flag_remote = false;
     boolean Connect_flag_sitStand = false;
     boolean Connect_flag_gait = false;
     static int Fail_Count_Master = 0;
     static int Fail_Count_Slave = 0;
+    static int Fail_Count_Remote = 0;
     static int Fail_Count_SitStand = 0;
     static int Fail_Count_Gait = 0;
     final int Fail_Threshold = 100;
     boolean MasterConnected = false;
     boolean SlaveConnected = false;
+    boolean RemoteConnected = false;
     boolean SitStandConnected = false;
     boolean GaitConnected = false;
     
@@ -114,6 +120,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     private TextView TextBalanceResult = null;
     private TextView TextMasterPoint = null;
     private TextView TextSlavePoint = null;
+    private TextView TextRemotePoint = null;
     private TextView TextBalanceTimeFirst = null;
     private TextView TextBalanceTimeSecond = null;
     private TextView TextBalanceTimeThird = null;
@@ -169,6 +176,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         //connect the view and the objects
 	    buttonConnect_master = (Button)findViewById(R.id.connect_master);
 	    buttonConnect_slave = (Button)findViewById(R.id.connect_slave);
+	    buttonConnect_remote = (Button)findViewById(R.id.connect_remote);
 	    buttonConnect_sitStand = (Button)findViewById(R.id.connect_sitStand);
 	    buttonConnect_gait = (Button)findViewById(R.id.connect_gait);
 	    
@@ -183,6 +191,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 	    //add Eventlisteners
 	    buttonConnect_master.setOnClickListener(buttonConnectMasterOnClickListener);
 	    buttonConnect_slave.setOnClickListener(buttonConnectSlaveOnClickListener);
+	    buttonConnect_remote.setOnClickListener(buttonConnectRemoteOnClickListener);
 	    buttonConnect_sitStand.setOnClickListener(buttonConnectSitStandOnClickListener);
 	    buttonConnect_gait.setOnClickListener(buttonConnectGaitOnClickListener);
 	    
@@ -194,6 +203,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 		TextBalanceResult = (TextView)findViewById(R.id.BalanceResult);
 		TextMasterPoint = (TextView)findViewById(R.id.ConnectionMasterPoint);
 		TextSlavePoint = (TextView)findViewById(R.id.ConnectionSlavePoint);	
+		TextRemotePoint = (TextView)findViewById(R.id.ConnectionRemotePoint);
 		TextBalanceTimeFirst = (TextView)findViewById(R.id.FirstTestTime);
 		TextBalanceTimeSecond = (TextView)findViewById(R.id.SecondTestTime);
 		TextBalanceTimeThird = (TextView)findViewById(R.id.ThirdTestTime);
@@ -212,6 +222,7 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 	    TextGaitTimeReturn = (TextView)findViewById(R.id.GaitTimeReturn);
 	    
         networktask_master = new NetworkTaskMaster();//Create initial instance so SendDataToNetwork doesn't throw an error.
+        networktask_remote = new NetworkTaskRemote();//Create initial instance so SendDataToNetwork doesn't throw an error.
         networktask_slave = new NetworkTaskSlave();//Create initial instance so SendDataToNetwork doesn't throw an error.
         networktask_sitStand = new NetworkTaskSitStand();//Create initial instance so SendDataToNetwork doesn't throw an error.
         networktask_gait = new NetworkTaskGait();//Create initial instance so SendDataToNetwork doesn't throw an error.
@@ -240,6 +251,27 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 											}											
 										} else {
 											Fail_Count_Master = 0;
+										}
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+								
+								if (Connect_flag_remote)
+								{	
+									try {
+										if(!networktask_remote.nsocket.getInetAddress().isReachable(100)) {
+											if ((++Fail_Count_Remote) >= Fail_Threshold) {
+												runOnUiThread(new Runnable() {
+													public void run() {
+														// TODO Auto-generated method stub
+														changeConnectionStatusRemote(false);
+													}
+												});
+											}
+										} else {
+											Fail_Count_Remote = 0;
 										}
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
@@ -747,6 +779,109 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
     }
     // ----------------------- THE NETWORK TASK - end ----------------------------
     
+ // ----------------------- THE NETWORK TASK - begin ----------------------------
+    public class NetworkTaskRemote extends AsyncTask<Void, byte[], Boolean> {
+        Socket nsocket; //Network Socket
+        InputStream nis; //Network Input Stream
+        OutputStream nos; //Network Output Stream
+        BufferedReader inFromServer;//Buffered reader to store the incoming bytes
+        SocketAddress sockaddr;
+
+        @Override
+        protected void onPreExecute() {
+        	//change the connection status to "connected" when the task is started
+        	Connect_flag_remote = true;
+        	changeConnectionStatusRemote(true);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) { //This runs on a different thread
+            boolean result = false;
+            try {
+            	//create a new socket instance
+            	
+                nsocket = new Socket();
+                nsocket.connect(sockaddr, 5000);//connect and set a 10 second connection timeout
+                if (nsocket.isConnected()) {//when connected
+                    nis = nsocket.getInputStream();//get input
+                    nos = nsocket.getOutputStream();//and output stream from the socket
+                    inFromServer = new BufferedReader(new InputStreamReader(nis));//"attach the inputstreamreader"
+                    while(true){//while connected
+                    	String msgFromServer = inFromServer.readLine();//read the lines coming from the socket
+                    	System.out.println(msgFromServer);
+                    	byte[] theByteArray = msgFromServer.getBytes();//store the bytes in an array
+                    	String Test [] = msgFromServer.split(",");
+	    				signalProcessing(Test[0]);
+                    }
+                }
+            //catch exceptions
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = true;
+            } finally {
+            	closeSocket();
+            }
+            return result;
+        }
+        
+        //Method closes the socket
+        public void closeSocket(){
+        	try {
+                nis.close();
+                nos.close();
+                nsocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        //Method tries to send Strings over the socket connection
+        public void SendDataToNetwork(String cmd) { //You run this from the main thread.
+            try {
+                if (nsocket.isConnected()) {
+                    nos.write(cmd.getBytes());
+                } else {
+                	showToast("SendDataToNetwork: Cannot send message. Socket is closed");
+                }
+            } catch (Exception e) {
+            	showToast("SendDataToNetwork: Message send failed. Caught an exception");
+            }
+        }
+
+        //Methods is called everytime a new String is recieved from the socket connection
+        @Override
+        protected void onProgressUpdate(byte[]... values) {
+            if (values.length > 0) {//if the recieved data is at least one byte
+                String command=new String(values[0]);//get the String from the recieved bytes
+            }
+        }
+        
+        //Method is called when task is cancelled
+        @Override
+        protected void onCancelled() {
+        	Connect_flag_remote = false;//change the connection to "disconnected"
+        	changeConnectionStatusRemote(false);
+        }
+        
+        //Method is called after taskexecution
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+            	showToast("onPostExecute: Completed with an Error.");
+            } else {
+            	showToast("onPostExecute: Completed.");
+            }
+            Connect_flag_remote = false;//change the connection to "disconnected"
+        	changeConnectionStatusRemote(false);
+        }
+    }
+    // ----------------------- THE NETWORK TASK - end ----------------------------
+    
  // ----------------------- CONNECT BUTTON EVENTLISTENER - begin ----------------------------
     private OnClickListener buttonConnectMasterOnClickListener = new OnClickListener() {
         public void onClick(View v){
@@ -786,6 +921,30 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
         		if(networktask_slave!=null){
         			networktask_slave.closeSocket();
         			networktask_slave.cancel(true);
+        		}
+        	}
+        }
+    };
+    
+    private OnClickListener buttonConnectRemoteOnClickListener = new OnClickListener() {
+        public void onClick(View v){
+        	//ipTail_master = editIp_master.getText().toString();
+        	
+        	//System.out.println("192.168.0." + ipTail_master);
+        	
+        	if(!RemoteConnected){//if not connected
+        		
+        		networktask_remote = new NetworkTaskRemote(); //New instance of NetworkTask
+        		
+        		networktask_remote.sockaddr = new InetSocketAddress("192.168.0.108", 4567);
+        		networktask_remote.execute();
+        		
+        		
+        	}else{
+        		
+        		if(networktask_remote!=null){
+        			networktask_remote.closeSocket();
+        			networktask_remote.cancel(true);
         		}
         	}
         }
@@ -855,6 +1014,25 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
   			speakWords("Lost connection to SitStand terminal!");
   			Connect_flag_sitStand = false;
   			TextSitStandPoint.setText("SitStand terminal: Offline");
+  			//buttonConnect_sitStand.setText("Connect To SitStand Terminal");//change Buttontext
+  			//buttonConnect_sitStand.setTextColor(50);
+  		}
+  	}
+  	
+  	 // Method changes the connection status
+  	public void changeConnectionStatusRemote(Boolean isConnected) {
+  		RemoteConnected=isConnected;//change variable
+  		if(isConnected){//if connection established
+  			showToast("successfully connected to server");//log
+  			speakWords("Remote terminal is connected!");
+  			TextRemotePoint.setText("Remote terminal: Online");
+  			//buttonConnect_sitStand.setText("Disconnect from SitStand Terminal");//change Buttontext
+  			//buttonConnect_sitStand.setTextColor(255);
+  		}else{
+  			showToast("disconnected from Server!");//log
+  			speakWords("Lost connection to Remote terminal!");
+  			Connect_flag_remote = false;
+  			TextRemotePoint.setText("Remote terminal: Offline");
   			//buttonConnect_sitStand.setText("Connect To SitStand Terminal");//change Buttontext
   			//buttonConnect_sitStand.setTextColor(50);
   		}
@@ -976,6 +1154,18 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 
         if(text.equalsIgnoreCase("first")) {
         	textToSpeak = "First test is done";
+        	
+        	String test = "1";
+        	byte []buffer = test.getBytes();
+        	try {
+				networktask_remote.nos.write(buffer);
+				networktask_remote.nos.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("cannot send the byte");
+				e.printStackTrace();
+			}
+        	
         	startFlag = false;
         	test_num = 2;
         	runOnUiThread(new Runnable() {
@@ -988,6 +1178,18 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 
         if(text.equalsIgnoreCase("second")) {
         	textToSpeak = "Second test is done";
+        	
+        	String test = "1";
+        	byte []buffer = test.getBytes();
+        	try {
+				networktask_remote.nos.write(buffer);
+				networktask_remote.nos.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("cannot send the byte");
+				e.printStackTrace();
+			}
+        	
         	startFlag = false;
         	test_num = 3;
         	runOnUiThread(new Runnable() {
@@ -1000,6 +1202,18 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
 
         if(text.equalsIgnoreCase("third")) {
         	textToSpeak = "Third test is done. Congratulations!";
+        	
+        	String test = "1";
+        	byte []buffer = test.getBytes();
+        	try {
+				networktask_remote.nos.write(buffer);
+				networktask_remote.nos.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("cannot send the byte");
+				e.printStackTrace();
+			}
+        	
         	startFlag = false;
         	test_num = 1;
         	runOnUiThread(new Runnable() {
@@ -1028,8 +1242,35 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
             	textToSpeak = "Motion detected!";
         	}
         } 
+        
+        if(text.equalsIgnoreCase("remote")) {
+        	//if(startFlag) {
+        		String test = "2";
+            	byte []buffer = test.getBytes();
+            	try {
+    				networktask_master.nos.write(buffer);
+    				networktask_master.nos.flush();
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				System.out.println("cannot send the byte");
+    				e.printStackTrace();
+    			}
+            	
+            	textToSpeak = "Button pressed!";
+        	//}
+        } 
 
         if(text.equalsIgnoreCase("stop")){
+        	String test = "1";
+        	byte []buffer = test.getBytes();
+        	try {
+				networktask_remote.nos.write(buffer);
+				networktask_remote.nos.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("cannot send the byte");
+				e.printStackTrace();
+			}
         	
         	startFlag = false;
     		test_num = 1;
@@ -1279,6 +1520,19 @@ public class SPPBTestWiFiActivity extends Activity implements OnInitListener {
             	} else if(text.endsWith("BT")) {
             		User_Name_Balance = User_Name;
             		textToSpeak = User_Name_Balance + ", Please go ahead push the button and start the Balance test";
+            		
+            		String test = "1";
+                	byte []buffer = test.getBytes();
+                	try {
+        				networktask_remote.nos.write(buffer);
+        				networktask_remote.nos.flush();
+        			} catch (IOException e) {
+        				// TODO Auto-generated catch block
+        				System.out.println("cannot send the byte");
+        				e.printStackTrace();
+        			}
+
+                        	
             		runOnUiThread(new Runnable() {
         				public void run() {
         					// TODO Auto-generated method stub

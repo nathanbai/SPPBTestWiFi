@@ -9,13 +9,30 @@
         android:layout_height="wrap_content" >
 
         <Button
+            android:id="@+id/connect_slave"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Balance S" />
+        
+        <Button
             android:id="@+id/connect_master"
             android:layout_width="95dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/connect_sitStand"
+            android:layout_toRightOf="@+id/connect_slave"
             android:text="Balance M" />
+        
+        <Button
+            android:id="@+id/connect_remote"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/connect_master"
+            android:text="Balance R" />
 
         <Button
             android:id="@+id/connect_sitStand"
@@ -23,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/connect_gait"
+            android:layout_toRightOf="@+id/connect_remote"
             android:text="Sit" />
 
         <Button
@@ -31,16 +48,11 @@
             android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/connect_sitStand"
             android:layout_alignParentTop="true"
             android:text="Gait" />
 
-        <Button
-            android:id="@+id/connect_slave"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="Balance S" />
+        
 
     </RelativeLayout>
     
@@ -162,6 +174,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Master terminal: Offline" />
+            
+            <TextView
+                android:id="@+id/ConnectionRemotePoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remote terminal: Offline" />
 
             <TextView
                 android:id="@+id/ConnectionSlavePoint"
